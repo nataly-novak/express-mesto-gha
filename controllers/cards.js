@@ -9,6 +9,7 @@ const showUser = (user) => ({
 
 const showCard = (card) => ({
   likes: card.likes,
+  _id: card._id,
   name: card.name,
   link: card.link,
   owner: showUser(card.owner),
@@ -36,7 +37,8 @@ module.exports.deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then((card) => res.send(showCard(card)))
     .catch((err) => {
-      if (err.name === 'CastError') { return res.status(404).send({ message: 'Карточка не найдена' }); }
+      if (err.name === 'CastError') { return res.status(400).send({ message: 'Карточка не найдена' }); }
+      if (err.name === 'TypeError') { return res.status(404).send({ message: 'Карточка не найдена' }); }
       return res.status(500).send({ message: 'Ошибка по умолчанию' });
     });
 };
@@ -49,7 +51,8 @@ module.exports.likeCard = (req, res) => {
     .then((card) => res.send(showCard(card)))
     .catch((err) => {
       if (err.name === 'ValidationError') { return res.status(400).send({ message: 'Переданы некорректные данные для постановки лайка' }); }
-      if (err.name === 'CastError') { return res.status(404).send({ message: 'Карточка не найдена' }); }
+      if (err.name === 'CastError') { return res.status(400).send({ message: 'Карточка не найдена' }); }
+      if (err.name === 'TypeError') { return res.status(404).send({ message: 'Карточка не найдена' }); }
       return res.status(500).send({ message: 'Ошибка по умолчанию' });
     });
 };
