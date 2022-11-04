@@ -19,10 +19,11 @@ module.exports.createUser = (req, res) => {
 
 module.exports.getUser = (req, res) => {
   User.findById(req.params.userId)
-    .then((user) => res.send(showUser(user)))
-    .catch((err) => {
+    .then((user) => {
+      if (user != null) { res.send(showUser(user)); }
+      return res.status(404).send({ message: 'Пользователь не найден' });
+    }).catch((err) => {
       if (err.name === 'CastError') { return res.status(400).send({ message: 'Пользователь не найден' }); }
-      if (err.name === 'TypeError') { return res.status(404).send({ message: 'Пользователь не найден' }); }
       return res.status(500).send({ message: 'Ошибка по умолчанию' });
     });
 };
@@ -43,13 +44,13 @@ module.exports.updateUser = (req, res) => {
     {
       new: true, // обработчик then получит на вход обновлённую запись
       runValidators: true, // данные будут валидированы перед изменением
-      upsert: true, // если пользователь не найден, он будет создан
     },
   )
-    .then((user) => res.send(showUser(user)))
-    .catch((err) => {
+    .then((user) => {
+      if (user != null) { res.send(showUser(user)); }
+      return res.status(404).send({ message: 'Пользователь не найден' });
+    }).catch((err) => {
       if (err.name === 'ValidationError') { return res.status(400).send({ message: 'Переданы некорректные данные в методы редактирования профиля' }); }
-      if (err.name === 'CastError') { return res.status(404).send({ message: 'Пользователь не найден' }); }
       return res.status(500).send({ message: 'Ошибка по умолчанию' });
     });
 };
@@ -61,13 +62,13 @@ module.exports.updateAvatar = (req, res) => {
     {
       new: true, // обработчик then получит на вход обновлённую запись
       runValidators: true, // данные будут валидированы перед изменением
-      upsert: true, // если пользователь не найден, он будет создан
     },
   )
-    .then((user) => res.send(showUser(user)))
-    .catch((err) => {
+    .then((user) => {
+      if (user != null) { res.send(showUser(user)); }
+      return res.status(404).send({ message: 'Пользователь не найден' });
+    }).catch((err) => {
       if (err.name === 'ValidationError') { return res.status(400).send({ message: 'Переданы некорректные данные в методы редактирования аватара пользователя' }); }
-      if (err.name === 'CastError') { return res.status(404).send({ message: 'Пользователь не найден' }); }
       return res.status(500).send({ message: 'Ошибка по умолчанию' });
     });
 };
