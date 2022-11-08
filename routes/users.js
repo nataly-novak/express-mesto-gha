@@ -13,7 +13,7 @@ router.get('/:userId', auth, getUser);
 router.patch('/me', auth, celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
-    about: Joi.string().required(),
+    about: Joi.string().required().min(2).max(30),
   }),
 }), updateUser);
 router.patch('/me/avatar', auth, celebrate({
