@@ -4,9 +4,10 @@ const { celebrate, Joi } = require('celebrate');
 const auth = require('../middlewares/auth');
 
 const {
-  getUser, updateUser, updateAvatar, getUserMe,
+  getUser, updateUser, updateAvatar, getUserMe, getUsers,
 } = require('../controllers/users');
 
+router.get('/', auth, getUsers);
 router.get('/me', auth, getUserMe);
 router.get('/:userId', auth, getUser);
 router.patch('/me', auth, celebrate({
