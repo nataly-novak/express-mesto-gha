@@ -13,6 +13,7 @@ module.exports.getUser = (req, res, next) => {
       throw new NotFoundError('Пользователь не найден');
     }).catch((err) => {
       if (err.name === 'CastError') { throw new NotFoundError('Пользователь не найден'); }
+      throw err;
     }).catch(next);
 };
 
@@ -23,6 +24,7 @@ module.exports.getUserMe = (req, res, next) => {
       return res.status(404).send({ message: 'Пользователь не найден' });
     }).catch((err) => {
       if (err.name === 'CastError') { throw new NotFoundError('Пользователь не найден'); }
+      throw err;
     }).catch(next);
 };
 
@@ -48,6 +50,7 @@ module.exports.updateUser = (req, res, next) => {
       throw new NotFoundError('Пользователь не найден');
     }).catch((err) => {
       if (err.name === 'ValidationError') { throw new ValidationError('Переданы некорректные данные в методы редактирования профиля'); }
+      throw err;
     }).catch(next);
 };
 module.exports.updateAvatar = (req, res, next) => {
