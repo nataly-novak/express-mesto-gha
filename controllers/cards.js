@@ -9,9 +9,9 @@ module.exports.createCard = (req, res, next) => {
   Card.create({ name, link, owner: req.user._id })
     .then((card) => res.send(card))
     .catch((err) => {
-      if (err.name === 'ValidationError') { throw new ValidationError('Переданы некорректные данные в методы создания карточки'); }
-      throw err;
-    }).catch(next);
+      if (err.name === 'ValidationError') { next(new ValidationError('Переданы некорректные данные в методы создания карточки')); }
+      next(err);
+    });
 };
 module.exports.getCards = (req, res, next) => {
   Card.find({})
@@ -39,10 +39,9 @@ module.exports.deleteCard = (req, res, next) => {
       res.send(card);
     })
     .catch((err) => {
-      if (err.name === 'CastError') { throw new NotFoundError('Карточка не найдена'); }
-      throw err;
-    })
-    .catch(next);
+      if (err.name === 'CastError') { next(new NotFoundError('Карточка не найдена')); }
+      next(err);
+    });
 };
 module.exports.likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
@@ -55,10 +54,10 @@ module.exports.likeCard = (req, res, next) => {
       throw (new NotFoundError('Карточка не найдена'));
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') { throw new ValidationError('Переданы некорректные данные для постановки лайка'); }
-      if (err.name === 'CastError') { throw new NotFoundError('Карточка не найдена'); }
-      throw err;
-    }).catch(next);
+      if (err.name === 'ValidationError') { next(new ValidationError('Переданы некорректные данные для постановки лайка')); }
+      if (err.name === 'CastError') { next(new NotFoundError('Карточка не найдена')); }
+      next(err);
+    });
 };
 module.exports.dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
@@ -71,8 +70,8 @@ module.exports.dislikeCard = (req, res, next) => {
       throw new NotFoundError('Карточка не найдена');
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') { throw new ValidationError('Переданы некорректные данные для снятия лайка'); }
-      if (err.name === 'CastError') { throw new NotFoundError('Карточка не найдена'); }
-      throw err;
-    }).catch(next);
+      if (err.name === 'ValidationError') { next(new ValidationError('Переданы некорректные данные для снятия лайка')); }
+      if (err.name === 'CastError') { next(new NotFoundError('Карточка не найдена')); }
+      next(err);
+    });
 };

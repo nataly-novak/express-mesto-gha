@@ -3,6 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
+const auth = require('./middlewares/auth');
+const NotFoundError = require('./errors/NotFoundError');
 
 // Слушаем 3000 порт
 const { PORT = 3000 } = process.env;
@@ -20,7 +22,7 @@ app.use('/signup', require('./routes/signup'));
 app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));
 
-app.use((req, res) => res.status(404).send({ message: 'Путь не найден' }));
+app.use(auth, () => { throw new NotFoundError('Путь не найден'); });
 
 app.use(errors());
 
