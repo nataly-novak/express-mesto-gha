@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const urlRegex = require('../constants/urlRegex');
 
 const cardSchema = new mongoose.Schema({
   name: { // у пользователя есть имя — опишем требования к имени в схеме:
@@ -12,7 +13,7 @@ const cardSchema = new mongoose.Schema({
     required: true, // оно должно быть у каждого пользователя, так что имя — обязательное поле
     validate: {
       validator(v) {
-        return /https?:\/\/(www\.)?[0-9a-zA-Z-]{1,256}\.[0-9a-zA-Z]{1,10}\/?([0-9a-zA-Z\-._~:/?#[\]@!$&'()*+,;=]{1,})?#?/.test(v);
+        return urlRegex.test(v);
       },
     },
   },

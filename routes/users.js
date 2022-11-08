@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 
 const auth = require('../middlewares/auth');
+const urlRegex = require('../constants/urlRegex');
 
 const {
   getUser, updateUser, updateAvatar, getUserMe, getUsers,
@@ -22,7 +23,7 @@ router.patch('/me', auth, celebrate({
 }), updateUser);
 router.patch('/me/avatar', auth, celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().required().regex(/https?:\/\/(www\.)?[0-9a-zA-Z-]{1,256}\.[0-9a-zA-Z]{1,10}\/?([0-9a-zA-Z\-._~:/?#[\]@!$&'()*+,;=]{1,})?#?/),
+    avatar: Joi.string().required().regex(urlRegex),
   }),
 }), updateAvatar);
 

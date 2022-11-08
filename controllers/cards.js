@@ -32,9 +32,8 @@ module.exports.deleteCard = (req, res, next) => {
       if (String(card.owner._id) !== String(req.user._id)) {
         throw (new WrongUserError('Нет Доступа'));
       }
-      return card;
+      return card.remove();
     })
-    .then((card) => Card.findByIdAndRemove(card._id))
     .then((card) => {
       res.send(card);
     })
