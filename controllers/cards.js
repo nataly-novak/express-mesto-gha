@@ -1,8 +1,8 @@
 const Card = require('../models/card');
 
 const NotFoundError = require('../errors/NotFoundError');
-const NoPermissionError = require('../errors/NoPermissionError');
 const ValidationError = require('../errors/ValidationError');
+const WrongUserError = require('../errors/WrongUserError');
 
 module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
@@ -23,14 +23,14 @@ module.exports.getCards = (req, res, next) => {
 module.exports.deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
     .then((card) => {
-      if (String(card.owner._id) !== String(req.user._id)) {
-        throw (new NoPermissionError('Нет Доступа'));
+      if (card === null) {
+        throw (new NotFoundError('Карточка не найдена'));
       }
       return card;
     })
     .then((card) => {
-      if (card === null) {
-        throw (new NotFoundError('Карточка не найдена'));
+      if (String(card.owner._id) !== String(req.user._id)) {
+        throw (new WrongUserError('Нет Доступа'));
       }
       return card;
     })
