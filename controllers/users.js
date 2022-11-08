@@ -77,7 +77,12 @@ module.exports.createUser = (req, res, next) => bcrypt.hash(req.body.password, 1
     about: req.body.about,
     avatar: req.body.avatar,
   }))
-  .then((user) => res.send({ email: user.email }))
+  .then((user) => res.send({
+    email: user.email,
+    name: user.name,
+    about: user.about,
+    avatar: user.avatar,
+  }))
   .catch((err) => {
     if (err.name === 'ValidationError') { throw new ValidationError('Переданы некорректные данные в методы создания пользователя'); }
     if (err.name === 'MongoServerError') { throw new ExistingUserError('Такой пользователь уже существует'); }
