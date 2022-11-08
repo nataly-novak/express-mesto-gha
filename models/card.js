@@ -10,11 +10,6 @@ const cardSchema = new mongoose.Schema({
   link: {
     type: String, // имя — это строка
     required: true, // оно должно быть у каждого пользователя, так что имя — обязательное поле
-    validate: {
-      validator(v) {
-        return /https?:\/\/(www\.)[-._~:/?#[]@!$&'\(\)\*\+,;=a-zA-Z0-9]/.test(v);
-      },
-    },
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,

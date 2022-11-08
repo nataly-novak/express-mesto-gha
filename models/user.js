@@ -21,6 +21,11 @@ const userSchema = new mongoose.Schema({
     type: String, // имя — это строка
     required: true, // оно должно быть у каждого пользователя, так что имя — обязательное поле
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
+    validate: {
+      validator(v) {
+        return /https?:\/\/(www\.)[-._~:/?#[]@!$&'\(\)\*\+,;=a-zA-Z0-9]/.test(v);
+      },
+    },
   },
   email: {
     type: String,
